@@ -1,0 +1,11 @@
+{% extends 'stroyinvest/base.html' %}
+
+{% block title %}Table{% endblock %}
+
+{% block content %}
+    {% for contract in contracts %}
+    <ul>
+        <li>{{ contract.subject_contract }} - {{ contract.customer }}</li>
+    </ul>
+    {% endfor %}
+{% endblock%}

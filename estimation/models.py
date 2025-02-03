@@ -3,6 +3,8 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+from .managers import ContractManagers
+
 
 class Company(models.Model):
     name = models.CharField(
@@ -50,6 +52,8 @@ class Contract(models.Model):
     shot_subject_contract = models.CharField(max_length=200, null=True, blank=True, verbose_name="Коротка назва")
     address = models.CharField(max_length=300, verbose_name="Адреса об`єкту")
     type = models.CharField(max_length=15, choices=CONTRACT_TYPE, default="ГП", verbose_name="Тип договору")
+
+    objects = ContractManagers()
 
     class Meta:
         verbose_name_plural = "contracts"
