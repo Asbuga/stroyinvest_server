@@ -22,5 +22,5 @@ from . import views
 
 app_name = 'estimation'
 urlpatterns = [
-    path('', views.table, name='table'),
+    path('table/', views.table, name='table'),
 ]

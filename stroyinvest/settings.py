@@ -14,8 +14,6 @@ import os
 from os import getenv
 from pathlib import Path
 
-from django.conf.locale.ar.formats import DATE_FORMAT
-from django.conf.locale.ru.formats import DATETIME_FORMAT
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
