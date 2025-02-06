@@ -38,8 +38,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Stroyinvest apps.
     'users',
+    'projects',
     'estimation',
-    
+
     # Other apps
     'django_bootstrap5',
 

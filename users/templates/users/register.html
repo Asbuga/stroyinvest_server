@@ -1,0 +1,17 @@
+{% extends 'stroyinvest/base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}Стройінвест{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'users:register' %}" method="post" class="col-md-7">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        
+        <button type="submit" class="btn btn-primary">register</button>
+{#        <input type="hidden" name="next" value="{% url 'users:index' %}" />#}
+    </form>
+    
+{% endblock %}

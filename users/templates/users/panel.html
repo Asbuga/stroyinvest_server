@@ -1,0 +1,21 @@
+{% extends 'stroyinvest/base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}Кабінет{% endblock %}
+
+{% block content %}
+<div>
+
+  <h3 class="d-flex justify-content-center align-items-center p-2 ">Проекти</h3>
+  <a class="link" href="{% url 'projects:add_project' %}">Додати проект</a>
+  {% for project in projects %}
+    <ul>
+      <li>
+        <p>{{ project }}</p>
+      </li>
+    </ul>
+  {% endfor %}
+  
+</div>
+{% endblock %}
