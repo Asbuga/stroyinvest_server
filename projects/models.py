@@ -60,5 +60,16 @@ class Project(models.Model):
 
     objects = ProjectManager()
 
+    def get_employees(self):
+        return [
+            self.manager,
+            self.engineer,
+            self.foreman,
+            self.estimator,
+            self.supply,
+            self.accountant,
+            self.economist,
+        ]
+
     def __str__(self):
         return self.name

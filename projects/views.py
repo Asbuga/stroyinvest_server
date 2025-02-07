@@ -1,11 +1,38 @@
-from django.views.generic import CreateView
+from django.shortcuts import render, redirect
+from django.urls.exceptions import NoReverseMatch
 
 from .models import Project
 from .forms import ProjectForm
 
 
-class ProjectCreateView(CreateView):
-    model = Project
-    form_class = ProjectForm
-    template_name = "projects/add_project.html"
-    success_url = "users/panel.html"
+def create_project(request):
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("users:panel")
+    else:
+        form = ProjectForm()
+    return render(request, 'projects/create_project.html', context={'form': form})
+
+
+def edit_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    if request.method == "POST":
+        form = ProjectForm(instance=project, data=request.POST)
+        if form.is_valid():
+            form.save()
+            try:
+                return redirect("project:get_project", project_id=project.id)
+            except NoReverseMatch:
+                return redirect("users:panel")
+    else:
+        form = ProjectForm(instance=project)
+    return render(request, 'projects/edit_project.html', context={'form': form, 'project': project})
+    
+
+def get_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    context = {'project': project, 'employees': project.get_employees}
+    return render(request, "projects/project.html", context)
+

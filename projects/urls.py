@@ -22,5 +22,7 @@ from . import views
 
 app_name = "projects"
 urlpatterns = [
-    path("add-project/", views.ProjectCreateView.as_view(), name="add_project")
+    path("project/<int:project_id>", views.get_project, name="project"),
+    path("project/create/", views.create_project, name="create_project"),
+    path("project/edit/<int:project_id>/", views.edit_project, name="edit_project"),
 ]

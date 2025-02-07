@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "estimation",
     # Other apps
     "django_bootstrap5",
+    "django.contrib.humanize",
     # Django apps.
     "django.contrib.admin",
     "django.contrib.auth",

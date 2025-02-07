@@ -6,7 +6,7 @@ from users.models import Employee
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(
-        widget=forms.TextInput(attrs={"name": "Найменування проекту"}),
+        widget=forms.TextInput(),
         label="Найменування проекту",
     )
     manager = forms.ModelChoiceField(
