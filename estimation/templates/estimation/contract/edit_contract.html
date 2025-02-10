@@ -11,7 +11,7 @@
       {% csrf_token %}
       {{ form.as_p }}
       <button class="w-100 btn btn-lg btn-primary" type="submit">Зберегти</button>
-      <input type="hidden" name="next" value="{% url 'estimation:table' %}" />
+      <input type="hidden" name="next" value="{% url 'estimation:get_contracts' %}" />
     </form>
   </div>
 

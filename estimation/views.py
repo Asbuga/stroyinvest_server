@@ -42,7 +42,8 @@ def table(request):
     summ = 0
     filtering_contracts = []
     for contract in contracts:
-        acts = contract.acts.filter(year=selected_year)
+        if selected_year != "Всі":
+            acts = contract.acts.filter(year=selected_year)
 
         if selected_month != "13":
             acts = acts.filter(period=selected_month)
@@ -82,7 +83,15 @@ def add_act(request):
 
 @login_required
 def edit_act(request, act_id):
-    pass
+    act = Act.objects.get(id=act_id)
+    if request.method == "POST":
+        form = ActCreateNew(instance=act, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("estimation:table")
+    else:
+        form = ActCreateNew(instance=act,)
+    return render(request, "estimation/act/edit_act.html", context={"form": form, "act": act})
 
 
 @login_required
@@ -106,7 +115,7 @@ def edit_contract(request, contract_id):
         form = ContractCreateNew(instance=contract, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect("estimation:table")
+            return redirect("estimation:get_contracts")
     else:
         form = ContractCreateNew(instance=contract)
     return render(
@@ -123,13 +132,15 @@ def get_contracts(request):
         Contract.objects.filter(type="ГП").order_by("contractor", "date_signing").all()
     )
     for contract in contracts:
-        acts_summ = Act.objects.filter(contract=contract).aggregate(Sum("summ"))['summ__sum']
+        acts_summ = Act.objects.filter(contract=contract).aggregate(Sum("summ"))[
+            "summ__sum"
+        ]
         print(acts_summ)
         contract_performance.append(
             {
                 "contract": contract,
                 "acts_summ": acts_summ,
-                "balance": contract.summ - acts_summ
+                "balance": contract.summ - acts_summ,
             }
         )
 

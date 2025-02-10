@@ -25,7 +25,7 @@ urlpatterns = [
 
     # Act.
     path("act/add/", views.add_act, name="add_act"),
-    path("act/edit/<int:act_id>", views.edit_act, name="add_act"),
+    path("act/edit/<int:act_id>", views.edit_act, name="edit_act"),
 
     # Contract.
     path("contracts/", views.get_contracts, name="get_contracts"),

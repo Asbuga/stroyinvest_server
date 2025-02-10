@@ -56,7 +56,7 @@
         <tr class="table-light">
           {% if forloop.first %}
             <td>{{ forloop.parentloop.counter }}</td>
-            <td>{{ contract.number }} від {{ contract.date_signing|date:"d.m.Y" }}</td>
+            <td><a href={% url 'estimation:edit_contract' contract.id %}>{{ contract.number }} від {{ contract.date_signing|date:"d.m.Y" }}</a></td>
             <td>
               {% if contract.type == "ГП" %}
                 {{ contract.customer }}

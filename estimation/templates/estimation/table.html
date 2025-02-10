@@ -25,6 +25,7 @@
         <!-- Форма вибору року -->
         <label for="year" class="align-self-center">Рік:</label>
         <select name="year" id="year" class="form-select w-auto">
+          <option value="Всі">Всі роки</option>
           {% for year in years %}
             <option value="{{ year }}" {% if selected_year|stringformat:"s" == year|stringformat:"s" %} selected {% endif %}>
               {{ year }}
@@ -81,10 +82,12 @@
                 <td class="fw-normal">{{ act.salary|floatformat:"2" }}</td>
                 <td class="fw-normal">{{ act.man_hours }}</td>
                 <td class="fw-normal">
-                  {{ act.number }}
-                  {% if act.date %}
-                    від {{ act.date|date:"d.m.Y" }}
-                  {% endif %}
+                  <a href="{% url 'estimation:edit_act' act.id %}">
+                    {{ act.number }}
+                    {% if act.date %}
+                      від {{ act.date|date:"d.m.Y" }}
+                    {% endif %}
+                  </a>
                 </td>          
                 <td class="fw-normal">{{ act.description|default:"-" }}</td>
                 <td class="fw-normal">
