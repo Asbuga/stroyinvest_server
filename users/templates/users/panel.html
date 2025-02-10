@@ -5,17 +5,21 @@
 {% block title %}Кабінет{% endblock %}
 
 {% block content %}
-<div>
 
-  <h3 class="d-flex justify-content-center align-items-center p-2 ">Проекти</h3>
-  <a class="link" href="{% url 'projects:create_project' %}">Додати проект</a>
-  {% for project in projects %}
-    <ul>
-      <li>
-        <a class="link" href="{% url 'projects:project' project.id %}">{{ project }}</a>
-      </li>
-    </ul>
-  {% endfor %}
-  
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Проекти:</h5>
+    <h5 class="mb-0"><a class="btn btn-primary" href="{% url 'projects:create_project' %}">Додати проект</a></h5>
+  </div>
+
+  <div class="container">
+    {% for project in projects %}
+      <ul>
+        <li>
+          <a class="link" href="{% url 'projects:project' project.id %}">{{ project }}</a>
+        </li>
+      </ul>
+    {% endfor %}
+  </div>  
 </div>
 {% endblock %}

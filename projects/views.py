@@ -3,6 +3,7 @@ from django.urls.exceptions import NoReverseMatch
 
 from .models import Project
 from .forms import ProjectForm
+from estimation.models import Contract
 
 
 def create_project(request):
@@ -33,6 +34,6 @@ def edit_project(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    context = {'project': project, 'employees': project.get_employees}
+    contracts = Contract.objects.filter(shot_subject_contract=project).order_by("customer", "date_signing").all()
+    context = {'project': project, 'employees': project.get_employees, 'contracts': contracts}
     return render(request, "projects/project.html", context)
-

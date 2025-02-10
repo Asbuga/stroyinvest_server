@@ -1,0 +1,18 @@
+{% extends 'stroyinvest/base.html' %}
+
+{% block title %}Додати контракт{% endblock %}
+
+{% block content %}
+
+  <h3 class="d-flex justify-content-center align-items-center">Додати контракт</h3>
+
+  <div class="col-md-10 mx-auto col-lg-5 mt-3">
+    <form class="form-multiline p-4 p-md-5 border bg-body-tertiary" method="post" action="{% url 'estimation:add_contract' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Зберегти</button>
+      <input type="hidden" name="next" value="{% url 'estimation:table' %}" />
+    </form>
+  </div>
+
+{% endblock %}

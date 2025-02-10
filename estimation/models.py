@@ -143,3 +143,17 @@ class Act(models.Model):
 
     def __str__(self):
         return f"{self.contract} - Акт № {self.number} за {self.date} на суму {self.summ} грн."
+
+
+class Addendum(models.Model):
+    """Клас описує додаткові угоди до договору."""
+    contract = models.ForeignKey(
+        Contract, on_delete=models.PROTECT, related_name="addendum", verbose_name="Договір"
+    )
+    number = models.CharField(
+        max_length=10, unique=True, verbose_name="Номер додаткової угоди"
+    )
+    date_signing = models.DateField(verbose_name="Дата підписання")
+    description = models.CharField(
+        max_length=250, blank=True, null=True, verbose_name="Примітка"
+    )

@@ -22,4 +22,13 @@ from . import views
 app_name = "estimation"
 urlpatterns = [
     path("table/", views.table, name="table"),
+
+    # Act.
+    path("act/add/", views.add_act, name="add_act"),
+    path("act/edit/<int:act_id>", views.edit_act, name="add_act"),
+
+    # Contract.
+    path("contracts/", views.get_contracts, name="get_contracts"),
+    path("contract/add/", views.add_contract, name="add_contract"),
+    path("contract/edit/<int:contract_id>", views.edit_contract, name="edit_contract"),
 ]
