@@ -1,5 +1,7 @@
 {% extends 'stroyinvest/base.html' %}
 
+{% load custom_digits %}
+
 {% block title %}Договори{% endblock %}
 
 {% block content %}
@@ -47,46 +49,49 @@
       <th scope="col">Виконано, грн.</th>
       <th scope="col">Залишок, грн.</th>
       <th scope="col">Примітка</th>
-      <th scope="col">Вибрати</th>
+      <th scope="col">Вибрати</th> 
     </tr>
     </thead>
     <tbody>
     {% for item in contract_performance %}
       {% with contract=item.contract acts_summ=item.acts_summ balance=item.balance %}
         <tr class="table-light">
-          {% if forloop.first %}
-            <td>{{ forloop.parentloop.counter }}</td>
-            <td><a href={% url 'estimation:edit_contract' contract.id %}>{{ contract.number }} від {{ contract.date_signing|date:"d.m.Y" }}</a></td>
-            <td>
-              {% if contract.type == "ГП" %}
-                {{ contract.customer }}
-              {% else %}
-                {{ contract.contractor }}
-              {% endif %}
-            </td>
-            <td>{{ contract.subject_contract }}</td>
-          {% endif %}
-            <td class="fw-normal">{{ contract.summ|floatformat:"2"}}</td>
-            <td class="fw-normal">{{ acts_summ|floatformat:"2"}}</td>
-            <td class="fw-normal"> {{ balance|floatformat:"2" }} </td>
-            <td class="fw-normal">{{ act.description|default:"-" }}</td>
-            <td class="fw-normal">
-              <input type="checkbox" name="selected_acts" value="{{ act.id }}">
-            </td>
+          <td>{{ forloop.counter  }}</td>
+          <td><a href={% url 'estimation:edit_contract' contract.id %}>{{ contract.number }} від {{ contract.date_signing|date:"d.m.Y" }}</a></td>
+          <td>
+            {% if contract.type == "ГП" %}
+              {{ contract.customer }}
+            {% else %}
+              {{ contract.contractor }}
+            {% endif %}
+          </td>
+          <td>{{ contract.subject_contract }}</td>
+          <td class="fw-normal">{{ contract.summ|format_currency }}</td>
+          <td class="fw-normal">{{ acts_summ|format_currency }}</td>
+          <td class="fw-normal">{{ balance|format_currency }}</td>
+          <td class="fw-normal">{{ act.description|default:"-" }}</td>
+          <td class="fw-normal">
+            <input type="checkbox" name="selected_acts" value="{{ contract.id }}">
+          </td>
         </tr>
       {% endwith %}
     {% endfor %}
     <tr class="table-light">
       <td colspan="4"><b>ВСЬОГО</b></td>
-      <td><b>{{ summ|floatformat:"2" }}</b></td>
+      <td><b>{{ summ|format_currency }}</b></td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
+      
     </tr>
     </tbody>
   </table>
   </form>
   </br>
   </br>
+  
+
+
+
 {% endblock %}

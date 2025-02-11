@@ -6,32 +6,33 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Contract, Act
 from .forms import ActCreateNew, ContractCreateNew
+from .utils import FilterContent
 
 
 @login_required
 def table(request):
     # Для вибору місяця (періоду закриття актів).
-    months = [
-        ("Січень", "Січень"),
-        ("Лютий", "Лютий"),
-        ("Березень", "Березень"),
-        ("Квітень", "Квітень"),
-        ("Травень", "Травень"),
-        ("Червень", "Червень"),
-        ("Липень", "Липень"),
-        ("Серпень", "Серпень"),
-        ("Вересень", "Вересень"),
-        ("Жовтень", "Жовтень"),
-        ("Листопад", "Листопад"),
-        ("Грудень", "Грудень"),
-    ]
-    selected_month = request.GET.get("month", "13")
+    # months = [
+    #     ("Січень", "Січень"),
+    #     ("Лютий", "Лютий"),
+    #     ("Березень", "Березень"),
+    #     ("Квітень", "Квітень"),
+    #     ("Травень", "Травень"),
+    #     ("Червень", "Червень"),
+    #     ("Липень", "Липень"),
+    #     ("Серпень", "Серпень"),
+    #     ("Вересень", "Вересень"),
+    #     ("Жовтень", "Жовтень"),
+    #     ("Листопад", "Листопад"),
+    #     ("Грудень", "Грудень"),
+    # ]
+    # selected_month = request.GET.get("month", "13")
 
     # Для вибору року закриття актів.
-    current_year = datetime.now().year
-    years = [str(year) for year in range(current_year, current_year - 5, -1)]
-    selected_year = request.GET.get("year", current_year)
-    selected_year = int(selected_year) if selected_year else current_year
+    # current_year = datetime.now().year
+    # years = [str(year) for year in range(current_year, current_year - 5, -1)]
+    # selected_year = request.GET.get("year", current_year)
+    # selected_year = int(selected_year) if selected_year else current_year
 
     # Для вибраних актів.
     selected_acts = list(map(int, request.GET.getlist("selected_acts")))
@@ -39,11 +40,18 @@ def table(request):
     # Для вибору актів та контрактів.
     contracts = Contract.objects.prefetch_related("acts").all()
 
+    select = FilterContent(request)
+
+    selected_year = select.get_selected_year()
+    selected_month = select.get_selected_month()
+
     summ = 0
     filtering_contracts = []
     for contract in contracts:
         if selected_year != "Всі":
             acts = contract.acts.filter(year=selected_year)
+        else:
+            acts = contract.acts.all()
 
         if selected_month != "13":
             acts = acts.filter(period=selected_month)
@@ -61,9 +69,9 @@ def table(request):
     context = {
         "filtering_contracts": filtering_contracts,
         "summ": summ,
-        "months": months,
+        "months": select.MONTH,
         "selected_month": selected_month,
-        "years": years,
+        "years": select.years,
         "selected_year": selected_year,
     }
     return render(request, "estimation/table.html", context)
@@ -100,7 +108,7 @@ def add_contract(request):
         form = ContractCreateNew(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("estimation/table.html")
+            return redirect("estimation:get_contracts")
     else:
         form = ContractCreateNew()
     return render(
@@ -135,12 +143,17 @@ def get_contracts(request):
         acts_summ = Act.objects.filter(contract=contract).aggregate(Sum("summ"))[
             "summ__sum"
         ]
-        print(acts_summ)
+        
+        if acts_summ is None:
+            acts_summ = 0
+
+        balance = contract.summ - acts_summ
+
         contract_performance.append(
             {
                 "contract": contract,
                 "acts_summ": acts_summ,
-                "balance": contract.summ - acts_summ,
+                "balance": balance,
             }
         )
 
@@ -149,3 +162,8 @@ def get_contracts(request):
         "estimation/contract/contracts.html",
         context={"contract_performance": contract_performance},
     )
+
+
+def get_contract(request):
+    return render(request, "estimation/contract/contract.html")
+

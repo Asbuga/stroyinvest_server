@@ -24,14 +24,13 @@ class UserEmployeeForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = [
-            "username",
-            "first_name",
-            "last_name",
-            "email",
-            "password1",
-            "password2",
-        ]
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs['class'] = "form-control"
 
     def seve(self):
         user = super().save(commit=False)

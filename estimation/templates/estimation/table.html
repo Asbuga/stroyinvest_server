@@ -1,5 +1,7 @@
 {% extends 'stroyinvest/base.html' %}
 
+{% load custom_digits %}
+
 {% block title %}Виконання{% endblock %}
 
 {% block content %}
@@ -78,9 +80,9 @@
                 {% endif %}
 
                 <!-- Відображаємо дані про акт -->
-                <td class="fw-normal">{{ act.summ }}</td>
-                <td class="fw-normal">{{ act.salary|floatformat:"2" }}</td>
-                <td class="fw-normal">{{ act.man_hours }}</td>
+                <td class="fw-normal">{{ act.summ|format_currency }}</td>
+                <td class="fw-normal">{{ act.salary|format_currency }}</td>
+                <td class="fw-normal">{{ act.man_hours|format_currency }}</td>
                 <td class="fw-normal">
                   <a href="{% url 'estimation:edit_act' act.id %}">
                     {{ act.number }}
@@ -100,7 +102,7 @@
 
         <tr class="table-light">
           <td colspan="4"><b>ВСЬОГО</b></td>
-          <td><b>{{ summ|floatformat:"2" }}</b></td>
+          <td><b>{{ summ|format_currency }}</b></td>
           <td></td>
           <td></td>
           <td></td>

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "users",
     "projects",
     "estimation",
+    "stroyinvest",
     # Other apps
     "django_bootstrap5",
     "django.contrib.humanize",
@@ -116,14 +117,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "uk"
 
 TIME_ZONE = "UTC"
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -137,3 +137,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Stroyinvest settings.
 DATE_FORMAT = "d.m.Y"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]

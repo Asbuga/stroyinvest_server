@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand">
+      {{ user.employee.department }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'users:panel' %}">Проекти</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'estimation:get_contracts' %}">Договори</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'estimation:table' %}">Виконання</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'estimation:table' %}">Виконання</a>
+          </li>
+        {% endif %}
+      </ul>
+      <ul class="navbar-nav me-right mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'users:panel' %}"><b>{{ user.first_name }} {{ user.last_name }}</b></a>
+          </li>
+          <li class="nav-item">
+            <form action="{% url 'users:logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="nav-link border-0 bg-transparent text-decoration-none">Вийти</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href=""></a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
