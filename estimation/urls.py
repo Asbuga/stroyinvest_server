@@ -19,6 +19,7 @@ from django.urls import path
 
 from . import views
 
+
 app_name = "estimation"
 urlpatterns = [
     path("table/", views.table, name="table"),
@@ -28,8 +29,14 @@ urlpatterns = [
     path("act/edit/<int:act_id>", views.edit_act, name="edit_act"),
 
     # Contract.
-    path("2/", views.get_contract, name="get_contract"),
     path("contracts/", views.get_contracts, name="get_contracts"),
-    path("contract/add/", views.add_contract, name="add_contract"),
-    path("contract/edit/<int:contract_id>", views.edit_contract, name="edit_contract"),
+    path("contract/add/", views.ContractFormView.as_view(), name="add_contract"),
+    path("contract/edit/<int:contract_id>", views.ContractFormView.as_view(), name="edit_contract"),
+    path("contract/delete/<int:contract_id>", views.delete_contract, name="delete_contract"),
+
+    # Addendum.
+    path("addendums/", views.get_addendums, name="get_addendums"),
+    path("addendum/add/", views.add_addendum, name="add_addendum"),
+    path("addendum/edit/<int:addendum_id>", views.edit_addendum, name="edit_addendum"),
+    path("addendum/delete/<int:addendum_id>", views.delete_addendum, name="delete_addendum"),
 ]

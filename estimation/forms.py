@@ -3,7 +3,7 @@ from django import forms
 from .models import Act, Contract
 
 
-class ContractCreateNew(forms.ModelForm):
+class ContractCreateForm(forms.ModelForm):
     class Meta:
         model = Contract
         fields = "__all__"

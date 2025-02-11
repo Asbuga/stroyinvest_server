@@ -16,7 +16,7 @@
         <!-- Форма вибору місяця -->
         <label for="month" class="align-self-center">Місяць:</label>
         <select name="month" id="month" class="form-select w-auto">
-          <option value="13">Всі місяці</option>
+          <option value="13"">Всі місяці</option>
           {% for number, name in months %}
             <option value="{{ number }}" {% if selected_month|stringformat:"s" == number|stringformat:"s" %} selected {% endif %}>
               {{ name }}
@@ -39,7 +39,7 @@
     <a href="{% url 'estimation:add_act' %}" class="btn btn-primary">Додати</a>
     </div>
     </br>
-    <table class="table table-warning table-bordered table-hover text-center text-top">
+    <table class="table table-warning table-bordered table-hover text-center text-top small">
       <thead>
         <tr class="align-middle">
           <th scope="col">Номер з/п</th>

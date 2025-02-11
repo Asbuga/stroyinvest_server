@@ -38,7 +38,7 @@
   <a href="{% url 'estimation:add_contract' %}" class="btn btn-primary">Додати</a>
   </div>
   </br>
-  <table class="table table-warning table-bordered table-hover text-center text-top">
+  <table class="table table-warning table-bordered table-hover text-center text-top small">
     <thead>
     <tr class="align-middle">
       <th scope="col">Номер з/п</th>
@@ -49,7 +49,8 @@
       <th scope="col">Виконано, грн.</th>
       <th scope="col">Залишок, грн.</th>
       <th scope="col">Примітка</th>
-      <th scope="col">Вибрати</th> 
+      <th scope="col">Статус</th>
+      <th scope="col">Вибрати</th>
     </tr>
     </thead>
     <tbody>
@@ -70,6 +71,7 @@
           <td class="fw-normal">{{ acts_summ|format_currency }}</td>
           <td class="fw-normal">{{ balance|format_currency }}</td>
           <td class="fw-normal">{{ act.description|default:"-" }}</td>
+          <td class="fw-normal">{{ contract.get_status }}</td>
           <td class="fw-normal">
             <input type="checkbox" name="selected_acts" value="{{ contract.id }}">
           </td>
@@ -83,7 +85,7 @@
       <td></td>
       <td></td>
       <td></td>
-      
+      <td></td>
     </tr>
     </tbody>
   </table>

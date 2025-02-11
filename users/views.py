@@ -3,7 +3,8 @@ from django.shortcuts import redirect, render
 
 from projects.models import Project
 
-from .forms import CustomAuthenticationForm, UserEmployeeForm
+from .models import Department
+from .forms import CustomAuthenticationForm, UserEmployeeForm, DepartmentForm
 
 
 class CustomLoginView(LoginView):
@@ -16,7 +17,7 @@ def register(request):
         form = UserEmployeeForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect("users:home")
+            return redirect("users:panel")
     else:
         form = UserEmployeeForm()
     context = {"form": form}
@@ -24,6 +25,67 @@ def register(request):
 
 
 def panel(request):
+    """Employee panel."""
     projects = Project.objects.get_estimator_projects(request.user.id)
     context = {"projects": projects}
     return render(request, "users/panel.html", context)
+
+
+def home_page(request):
+    pass
+
+
+# Work with departments.
+def get_departments(request):
+    title = "Відділи"
+    departments = Department.objects.order_by("title").all()
+    context = {"departments": departments, "title": title}
+    return render(request, "users/department/departments.html", context)
+
+
+def get_department(request, department_id):
+    department = Department.objects.get(id=department_id)
+    context = {"departments": department, "title": department.title}
+    return render(request, "users/department/get_department.html", context)
+
+def add_department(request):
+    if request.method == "POST":
+        form = DepartmentForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("users:panel")
+    else:
+        form = UserEmployeeForm()
+    context = {"form": form}
+    return render(request, "users/register.html", context)
+
+
+
+
+def edit_department(request):
+    pass
+
+
+def delete_department(request):
+    pass
+
+
+# Work with Employee.
+def get_employees(request):
+    pass
+
+
+def add_employee(request):
+    pass
+
+
+def get_employee(request):
+    pass
+
+
+def edit_employee(request):
+    pass
+
+
+def delete_employee(request):
+    pass

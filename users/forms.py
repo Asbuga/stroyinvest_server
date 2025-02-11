@@ -6,6 +6,14 @@ from django.db.transaction import commit
 from .models import Department, Employee, Position
 
 
+class DepartmentForm(forms.ModelForm):
+    
+    class Meta:
+        model = Department
+        fields = "__all__"
+        
+
+
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(
         label="", widget=forms.TextInput(attrs={"placeholder": "логін"})
@@ -16,21 +24,35 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class UserEmployeeForm(UserCreationForm):
-    department = forms.ModelChoiceField(queryset=Department.objects.all())
-    position = forms.ModelChoiceField(queryset=Position.objects.all())
-    birth_day = forms.DateField()
-    mobile_phone = forms.CharField()
-    internal_phone = forms.CharField()
+    department = forms.ModelChoiceField(
+        queryset=Department.objects.all(),
+        label=Department._meta.get_field("title").verbose_name,
+    )
+    position = forms.ModelChoiceField(
+        queryset=Position.objects.all(),
+        label=Position._meta.get_field("title").verbose_name,
+    )
+    birth_day = forms.DateField(
+        label=Employee._meta.get_field("birth_day").verbose_name
+    )
+    mobile_phone = forms.CharField(
+        label=Employee._meta.get_field("mobile_phone").verbose_name
+    )
+    internal_phone = forms.CharField(
+        label=Employee._meta.get_field("internal_phone").verbose_name
+    )
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ["username", "first_name", "last_name", "email"]
+        help_texts = {"username": "", "password": ""}
+        labels = {"username": "Логін для входу"}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-            field.widget.attrs['class'] = "form-control"
+            field.widget.attrs["class"] = "form-control"
 
     def seve(self):
         user = super().save(commit=False)

@@ -1,39 +1,20 @@
 from datetime import datetime
 
-from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import View
+
 
 from .models import Contract, Act
-from .forms import ActCreateNew, ContractCreateNew
+from .forms import ActCreateNew, ContractCreateForm
 from .utils import FilterContent
 
 
 @login_required
 def table(request):
-    # Для вибору місяця (періоду закриття актів).
-    # months = [
-    #     ("Січень", "Січень"),
-    #     ("Лютий", "Лютий"),
-    #     ("Березень", "Березень"),
-    #     ("Квітень", "Квітень"),
-    #     ("Травень", "Травень"),
-    #     ("Червень", "Червень"),
-    #     ("Липень", "Липень"),
-    #     ("Серпень", "Серпень"),
-    #     ("Вересень", "Вересень"),
-    #     ("Жовтень", "Жовтень"),
-    #     ("Листопад", "Листопад"),
-    #     ("Грудень", "Грудень"),
-    # ]
-    # selected_month = request.GET.get("month", "13")
-
-    # Для вибору року закриття актів.
-    # current_year = datetime.now().year
-    # years = [str(year) for year in range(current_year, current_year - 5, -1)]
-    # selected_year = request.GET.get("year", current_year)
-    # selected_year = int(selected_year) if selected_year else current_year
-
     # Для вибраних актів.
     selected_acts = list(map(int, request.GET.getlist("selected_acts")))
 
@@ -105,27 +86,70 @@ def edit_act(request, act_id):
 @login_required
 def add_contract(request):
     if request.method == "POST":
-        form = ContractCreateNew(request.POST)
+        form = ContractCreateForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("estimation:get_contracts")
     else:
-        form = ContractCreateNew()
+        form = ContractCreateForm()
     return render(
         request, "estimation/contract/add_contract.html", context={"form": form}
     )
+
+
+
+class ContractFormView(View):
+    model = Contract
+    form_class = ContractCreateForm
+    template_name = "estimation/contract_form.html"
+    success_url = reverse_lazy("estimation:get_contracts")
+    
+
+    def get_object(self):
+        contract_id = self.kwargs.get("contract_id", None)
+        return get_object_or_404(Contract, id=contract_id) if contract_id else None
+
+    
+    def get(self, request, *args, **kwargs):
+        contract = self.get_object()
+        form = self.form_class(instance=contract)
+        context = {
+            "form": form,
+            "contract": contract,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        title = "Редагувати контракт"
+        contract = self.get_object()
+        action = request.POST.get("action")
+        
+        form = self.form_class(request.POST, instance=contract)
+
+        if action == "post":
+            if form.is_valid():
+                form.save()
+                return redirect(self.success_url)
+        
+        if contract:
+            contract.delete()
+            return redirect(self.success_url)
+    
+        context = {"form": form, "contract": contract, "title": title}
+        return render(request, self.template_name, context)    
+
 
 
 @login_required
 def edit_contract(request, contract_id):
     contract = Contract.objects.get(id=contract_id)
     if request.method == "POST":
-        form = ContractCreateNew(instance=contract, data=request.POST)
+        form = ContractCreateForm(instance=contract, data=request.POST)
         if form.is_valid():
             form.save()
             return redirect("estimation:get_contracts")
     else:
-        form = ContractCreateNew(instance=contract)
+        form = ContractCreateForm(instance=contract)
     return render(
         request,
         "estimation/contract/edit_contract.html",
@@ -159,7 +183,7 @@ def get_contracts(request):
 
     return render(
         request,
-        "estimation/contract/contracts.html",
+        "estimation/contract_overview.html",
         context={"contract_performance": contract_performance},
     )
 
@@ -167,3 +191,29 @@ def get_contracts(request):
 def get_contract(request):
     return render(request, "estimation/contract/contract.html")
 
+
+def delete_contract(request, contract_id):
+    contract = Contract.objects.get(id=contract_id)
+    if request.method == "DELETE":
+        contract.delete()
+        redirect("estimation:get_contracts")
+    else:
+        pass
+
+
+# Addendum.
+def get_addendums(request):
+    title = "Додаткові угоди"
+    pass
+        
+def add_addendum(request):
+    title = "Додати додаткову угоди"
+    pass
+    
+def edit_addendum(request, contract_id):
+    title = "Редагувати додаткову угоди"
+    pass
+    
+def delete_addendum(request, contract_id):
+    title = "Видалити угоди"
+    pass

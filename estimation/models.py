@@ -72,11 +72,19 @@ class Contract(models.Model):
         max_length=1500, verbose_name="Предмет договору"
     )
     shot_subject_contract = models.ForeignKey(
-        Project, on_delete=models.PROTECT, verbose_name="Назва проекту"
+        Project, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Назва проекту"
     )
-    address = models.CharField(max_length=300, verbose_name="Адреса об`єкту")
+    address = models.CharField(max_length=300, blank=True, null=True, verbose_name="Адреса об`єкту")
     type = models.CharField(
         max_length=15, choices=CONTRACT_TYPE, default="ГП", verbose_name="Тип договору"
+    )
+    status = models.BooleanField(
+        default=True,
+        choices=[
+            (True, "Активний"),
+            (False, "Завершений")
+        ],
+        verbose_name="Статус договору",
     )
 
     objects = ContractManagers()
@@ -92,6 +100,9 @@ class Contract(models.Model):
             raise ValidationError(
                 "Замовник і підрядник не можуть бути однією компанією."
             )
+    
+    def get_status(self):
+        return self.get_status_display()
 
 
 class Act(models.Model):
