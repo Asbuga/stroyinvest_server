@@ -10,17 +10,27 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'users:panel' %}">Проекти</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'estimation:get_contracts' %}">Контракти</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'estimation:get_contracts' %}">Договори</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'estimation:get_acts' %}">Виконання</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'estimation:table' %}">Виконання</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Внести дані
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url "estimation:add_contract" %}">Контракт</a></li>
+              <li><a class="dropdown-item" href="{% url "estimation:add_addendum" %}">Додаткова угода</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url "estimation:add_act" %}">Виконання</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Користувачі</a></li>
+            </ul>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'estimation:table' %}">Виконання</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'estimation:get_acts' %}">Виконання</a>
           </li>
         {% endif %}
       </ul>
@@ -37,7 +47,7 @@
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href=""></a>
+            <a class="nav-link active" aria-current="page" href="{% url "users:login" %}">Увійти</a>
           </li>
         {% endif %}
       </ul>

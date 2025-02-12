@@ -1,0 +1,102 @@
+{% extends 'stroyinvest/base.html' %}
+
+{% load custom_digits %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+  <div class="container">
+
+    <h4 class="d-flex justify-content-center align-items-center p-2 ">{{ title }}</h4>
+
+    <!-- Form for select Contract model fields. -->
+    <form method="get">
+      <div class="container d-flex justify-content-between align-items-center mb-2 form-label">
+        {% for field in filter.form %}
+          <div class="col-auto">
+              <label for="{{ field.id_for_label }}" class="visually-hidden">{{ field.label }}</label>
+              {{ field }}
+          </div>
+        {% endfor %}
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-secondary btn-sm me-3">Оновити</button>
+            <a href="{% url "estimation:add_contract" %}" class="btn btn-outline-success btn-sm ms-3">Додати</a> 
+        </div>
+      </div>
+
+      <div class="container">
+        <table class="table table-warning table-bordered table-hover text-center text-top small">
+          <thead>
+          <tr class="align-middle">
+            <th scope="col">№</th>
+            <th scope="col">Контаракт</th>
+            <th scope="col">Контрагент</th>
+            <th scope="col">Предмет договору</th>
+            <th scope="col">Сума,</br>грн.</th>
+            <th scope="col">Виконано, грн.</th>
+            <th scope="col">Залишок, грн.</th>
+            <th scope="col">Примітка</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Вибрати</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for item in performance_contract %}
+            {% with contract=item.contract acts_summ=item.acts_summ balance=item.balance addendums=item.addendums %}
+              <tr class="table-light">
+                <td>{{ forloop.counter  }}</td>
+                <td><a href={% url 'estimation:edit_contract' contract.id %}>{{ contract.number }} від {{ contract.date_signing|date:"d.m.Y" }}</a></td>
+                <td>
+                  {% if contract.type == "ГП" %}
+                    {{ contract.customer }}
+                  {% else %}
+                    {{ contract.contractor }}
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="#" data-bs-toggle="collapse" data-bs-target="#hiddenText">
+                    {{ contract.subject_contract }}
+                  </a>
+                  <div class="collapse mt-2" id="hiddenText">
+                    <div class="">
+                      <ul>
+                        {% for addendum in addendums %}
+                          <li class="text-start">
+                            <a href="{% url "estimation:edit_addendum" addendum.id %}">ДУ № {{ addendum.number }} від {{ addendum.date_signing|date:"d.m.Y" }}</a> - {{ addendum.description }}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+                <td class="fw-normal">{{ contract.summ|format_currency }}</td>
+                <td class="fw-normal">{{ acts_summ|format_currency }}</td>
+                <td class="fw-normal">{{ balance|format_currency }}</td>
+                <td class="fw-normal">{{ act.description|default:"-" }}</td>
+                <td class="fw-normal">
+                  {{ contract.get_status }}
+                </td>
+                <td class="fw-normal">
+                  <input type="checkbox" name="selected_contract" value="{{ contract.id }}">
+                </td>
+              </tr>
+            {% endwith %}
+          {% endfor %}
+          <tr class="table-light">
+            <td colspan="4"><b>ВСЬОГО</b></td>
+            <td><b>{{ contracts_summ|format_currency }}</b></td>
+            <td>{{ contracts_balance|format_currency }}</td>
+            <td>{{ balance_all|format_currency }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </form>
+  </div>
+
+{% endblock %}

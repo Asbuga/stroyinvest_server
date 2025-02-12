@@ -1,5 +1,7 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+
 
 from projects.models import Project
 
@@ -9,6 +11,7 @@ from .forms import CustomAuthenticationForm, UserEmployeeForm, DepartmentForm
 
 class CustomLoginView(LoginView):
     authentication_form = CustomAuthenticationForm
+    success_url = reverse_lazy("estimation:get_acts")
 
 
 def register(request):
@@ -26,10 +29,13 @@ def register(request):
 
 def panel(request):
     """Employee panel."""
+    return redirect("estimation:get_acts")
+    """
     projects = Project.objects.get_estimator_projects(request.user.id)
     context = {"projects": projects}
     return render(request, "users/panel.html", context)
-
+    """
+    
 
 def home_page(request):
     pass

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Other apps
     "django_bootstrap5",
     "django.contrib.humanize",
+    "django_filters",
     # Django apps.
     "django.contrib.admin",
     "django.contrib.auth",

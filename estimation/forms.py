@@ -1,9 +1,39 @@
 from django import forms
 
-from .models import Act, Contract
+from .models import Act, Addendum, Contract
 
 
-class ContractCreateForm(forms.ModelForm):
+class ActForm(forms.ModelForm):
+    class Meta:
+        model = Act
+        fields = "__all__"
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
+class AddendumForm(forms.ModelForm):
+    class Meta:
+        model = Addendum
+        fields = "__all__"
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
+class ContractForm(forms.ModelForm):
     class Meta:
         model = Contract
         fields = "__all__"
@@ -16,20 +46,4 @@ class ContractCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-            field.widget.attrs['class'] = "form-control"
-
-
-
-class ActCreateNew(forms.ModelForm):
-    class Meta:
-        model = Act
-        fields = "__all__"
-        widgets = {
-            "description": forms.Textarea(attrs={"rows": 3}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for field in self.fields.values():
-            field.widget.attrs['class'] = "form-control"
+            field.widget.attrs["class"] = "form-control"

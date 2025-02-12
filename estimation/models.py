@@ -102,7 +102,7 @@ class Contract(models.Model):
             )
     
     def get_status(self):
-        return self.get_status_display()
+        return self.get_status_display() + "\n" + self.type
 
 
 class Act(models.Model):
@@ -168,3 +168,6 @@ class Addendum(models.Model):
     description = models.CharField(
         max_length=250, blank=True, null=True, verbose_name="Примітка"
     )
+
+    def __str__(self):
+        return f"ДУ № {self.number} від {self.date_signing}"
