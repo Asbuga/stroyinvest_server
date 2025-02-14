@@ -23,19 +23,5 @@ app_name = "users"
 urlpatterns = [
     path("", include("django.contrib.auth.urls")),
     path("login/", views.CustomLoginView.as_view(), name="login"),
-    path("register/", views.register, name="register"),
-    # Employee panel.
-    path("panel/", views.panel, name="panel"),
-    # Work with departments.
-    path("departments/", views.get_departments, name="get_departments"),
-    path("department/add/", views.add_department, name="add_department"),
-    path("department/get/<int:department_id>", views.get_department, name="get_department"),
-    path("department/edit/<int:department_id>", views.edit_department, name="edit_department"),
-    path("department/delete/<int:department_id>", views.delete_department, name="delete_department"),
-    # Work with Employee.
-    path("employees/", views.get_employees, name="get_employees"),
-    path("employee/add/", views.add_employee, name="add_employee"),
-    path("employee/get/<int:employee_id>", views.get_employee, name="add_employee"),
-    path("employee/edit/<int:employee_id>", views.edit_employee, name="edit_employee"),
-    path("employee/delete/<int:employee_id>", views.delete_employee, name="edit_employee"),
+    path("register/", views.CustomRegisterView.as_view(), name="register"),
 ]

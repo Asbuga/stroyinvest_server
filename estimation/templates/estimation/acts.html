@@ -6,40 +6,25 @@
 
 {% block content %}
 
-  <h3 class="d-flex justify-content-center align-items-center p-2 ">ВИКОНАННЯ</h3>
+<div class="container">
 
-  <div class="container">
+  <h4 class="d-flex justify-content-center align-items-center p-2 ">{{ title }}</h4>
 
   <form method="get">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="d-flex gap-2">
 
-        <!-- Форма вибору місяця -->
-        <label for="month" class="align-self-center">Місяць:</label>
-        <select name="month" id="month" class="form-select w-auto">
-          <option value="13">Всі місяці</option>
-          {% for number, name in months %}
-            <option value="{{ number }}" {% if selected_month|stringformat:"s" == number|stringformat:"s" %} selected {% endif %}>
-              {{ name }}
-            </option>
-          {% endfor %}
-        </select>
-
-        <!-- Форма вибору року -->
-        <label for="year" class="align-self-center">Рік:</label>
-        <select name="year" id="year" class="form-select w-auto">
-          <option value="Всі">Всі роки</option>
-          {% for year in years %}
-            <option value="{{ year }}" {% if selected_year|stringformat:"s" == year|stringformat:"s" %} selected {% endif %}>
-              {{ year }}
-            </option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn btn-primary">Оновити</button>
-      </div>
-      {% if user.is_authenticated %}
-        <a href="{% url 'estimation:add_act' %}" class="btn btn-primary">Додати</a>
-      {% endif %}
+    <div class="container d-flex align-items-center mb-2 form-label">
+      {% for field in filter.form %}
+        <div class="col-auto justify-content-start p-1">
+          <label for="{{ field.id_for_label }}" class="visually-hidden g-1">{{ field.label }}</label>
+            {{ field }}
+        </div>
+      {% endfor %}
+        <div class="col-auto">
+          <button type="submit" class="btn btn-outline-secondary btn-sm me-3">Оновити</button>
+        </div>
+        <div class="col-auto ms-auto">
+          <a href="{% url "estimation:add_contract" %}" class="btn btn-outline-success btn-sm ms-3">Додати</a> 
+        </div>
     </div>
     
     <table class="table table-warning table-bordered table-hover text-center text-top small mt-2 pt-2">
@@ -103,7 +88,7 @@
                 </td>          
                 <td class="fw-normal">{{ act.description|default:"-" }}</td>
                 <td class="fw-normal">
-                  <input type="checkbox" name="selected_acts" value="{{ act.id }}">
+                  <input type="checkbox" name="selected" value="{{ act.id }}">
                 </td>
               </tr>
             {% endfor %}

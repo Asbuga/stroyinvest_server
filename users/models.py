@@ -34,9 +34,6 @@ class Employee(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, verbose_name="Працівник"
     )
-    department = models.ForeignKey(
-        Department, on_delete=models.PROTECT, verbose_name="Відділ"
-    )
     position = models.ForeignKey(
         Position, on_delete=models.PROTECT, verbose_name="Посада"
     )
@@ -58,3 +55,16 @@ class Employee(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
+    
+    @property
+    def department(self):
+        return self.position.department.title
+    
+    @property
+    def role(self):
+        if self.user.groups.filter(name="admin").exists():
+            return "admin"
+        elif self.user.groups.filter(name="department_head").exists():
+            return "department_head"
+        else:
+            return "employee"

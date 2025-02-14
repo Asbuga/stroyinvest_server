@@ -1,0 +1,39 @@
+{% extends 'stroyinvest/base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}{{ title }}</title>{% endblock %}
+
+{% block content %}
+  
+  <h3 class="d-flex justify-content-center align-items-center p-2">{{ title }}</h3>
+  
+  <table class="table table-success table-bordered table-hover text-center">
+    <thead>
+      <tr>
+        <th scope="col">Проєкт</th>
+        <th scope="col">Менеджер</th>
+        <th scope="col">Інженер ПТО</th>
+        <th scope="col">Прораб</th>
+        <th scope="col">Кошторисник</th>
+        <th scope="col">Постачання</th>
+        <th scope="col">Бухгалтер</th>
+        <th scope="col">Економіст</th>
+      </tr>
+    </thead>
+    <tbody class="table-light">
+      {% for project in projects %}
+        <tr>
+          <td><a href={% url "projects:edit_project" project.id %}>{{ project }}</a></td>
+          <td>{{ project.manager|default:"---" }}</td>
+          <td>{{ project.engineer|default:"---" }}</td>
+          <td>{{ project.foreman|default:"---" }}</td>
+          <td>{{ project.estimator|default:"---" }}</td>
+          <td>{{ project.supplier|default:"---" }}</td>
+          <td>{{ project.accountant|default:"---" }}</td>
+          <td>{{ project.economist|default:"---" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

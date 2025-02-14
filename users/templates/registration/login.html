@@ -14,7 +14,7 @@
       </div>
       {% if user.is_authenticated %}
         <div class="col-md-10 mx-auto col-lg-5">
-          <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" method="get" action="{% url 'users:panel' %}">
+          <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" method="get" action="{% url 'estimation:get_acts' %}">
             <button class="w-100 btn btn-lg btn-primary" type="submit">До проєктів</button>
           </form>
         </div>
@@ -24,7 +24,7 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button class="w-100 btn btn-lg btn-primary" type="submit">Увійти</button>
-            <input type="hidden" name="next" value="{% url 'users:panel' %}" />
+            <input type="hidden" name="next" value="{% url 'estimation:get_acts' %}" />
           </form>
         </div>
       {% endif %}

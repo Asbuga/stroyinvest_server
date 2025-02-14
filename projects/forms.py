@@ -10,37 +10,37 @@ class ProjectForm(forms.ModelForm):
         label="Найменування проекту",
     )
     manager = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="Менеджер"),
+        queryset=Employee.objects.filter(position__department__title="Менеджер"),
         label="Менеджер",
         required=False,
     )
     engineer = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="(ПТО)"),
+        queryset=Employee.objects.filter(position__department__title="(ПТО)"),
         label="Інженер ВТВ",
         required=False,
     )
     foreman = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="Прораб"),
+        queryset=Employee.objects.filter(position__department__title="Прораб"),
         label="Прораб",
         required=False,
     )
     estimator = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="Кошторис"),
+        queryset=Employee.objects.filter(position__department__title="Кошторисний"),
         label="Кошторисник",
         required=False,
     )
     supply = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="Постачання"),
+        queryset=Employee.objects.filter(position__department__title="Постачання"),
         label="Фахівець з постачання",
         required=False,
     )
     accountant = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="Бухгалтер"),
+        queryset=Employee.objects.filter(position__department__title="Бухгалтер"),
         label="Бухгалтер",
         required=False,
     )
     economist = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(department__title__icontains="Економіст"),
+        queryset=Employee.objects.filter(position__department__title="Економіст"),
         label="Економіст",
         required=False,
     )
